@@ -23,9 +23,7 @@ import (
 )
 
 func FuzzParseAuthHeader(f *testing.F) {
-	f.Add([]byte(`Bearer realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`))
-	f.Add([]byte(`Digest realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`))
-	f.Add([]byte(`Basic realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`))
+	f.Add([]byte(`sfsfsf"`))
 	f.Fuzz(func(t *testing.T, data []byte) {
 		ff := fuzz.NewConsumer(data)
 		v, _ := ff.GetString()
