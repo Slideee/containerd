@@ -22,7 +22,7 @@ import (
 )
 
 func FuzzParseAuthHeader(f *testing.F) {
-	//f.Add(`Bearer realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`)
+	f.Add(`Digest realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`)
 	f.Fuzz(func(t *testing.T, v string) {
 		h := http.Header{http.CanonicalHeaderKey("WWW-Authenticate"): []string{v}}
 		_ = ParseAuthHeader(h)
