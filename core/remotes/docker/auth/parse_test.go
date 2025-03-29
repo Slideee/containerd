@@ -17,13 +17,18 @@
 package auth
 
 import (
+	fuzz "github.com/AdaLogics/go-fuzz-headers"
 	"net/http"
 	"testing"
 )
 
 func FuzzParseAuthHeader(f *testing.F) {
-	f.Add(`digest realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`)
-	f.Fuzz(func(t *testing.T, v string) {
+	f.Add([]byte(`Bearer realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`))
+	f.Add([]byte(`Digest realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`))
+	f.Add([]byte(`Basic realm="https://example.com/token",service="example.com",scope="repository:foo/bar:pull,push"`))
+	f.Fuzz(func(t *testing.T, data []byte) {
+		ff := fuzz.NewConsumer(data)
+		v, _ := ff.GetString()
 		h := http.Header{http.CanonicalHeaderKey("WWW-Authenticate"): []string{v}}
 		_ = ParseAuthHeader(h)
 	})
